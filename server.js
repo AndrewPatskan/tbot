@@ -1,12 +1,11 @@
-const http = require('node:http');
-
 const { config: { HOST, PORT } } = require('./config');
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  return res.end('hi');
-});
+const app = require('./app');
 
-server.listen(PORT, HOST, () => {
-  console.log(`Server running at ${HOST}:${PORT}`);
-});
+(async () => {
+  const server = await app();
+
+  server.listen(PORT, HOST, () => {
+    console.log(`Server running at ${HOST}:${PORT}`);
+  });
+})();
