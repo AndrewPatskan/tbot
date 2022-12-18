@@ -1,8 +1,0 @@
-Server running at http://127.0.0.1:2512/
-Server running at http://127.0.0.1:2512/
-Server running at http://127.0.0.1:2512/
-Server running at http://127.0.0.1:2512/
-Server running at http://127.0.0.1:2512/
-Server running at http://127.0.0.1:2512/
-2022-12-18 11:57 +02:00: Server running at http://127.0.0.1:2512/
-{"message":"Server running at http://127.0.0.1:2512/\n","timestamp":"2022-12-18 11:57 +02:00","type":"out","process_id":0,"app_name":"server"}
