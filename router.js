@@ -2,11 +2,19 @@ const express = require('express');
 
 const router = express.Router();
 
-router.post('/message', async (req, res, next) => {
+const { telegram } = require('./adapters/telegram');
+
+router.get('/message', async (req, res, next) => {
   try {
     const { body } = req;
 
-    console.log(body);
+    const { message } = body;
+
+    if (message?.text.includes('start')) {
+      return res.json({ text: 'Введіть назву вулиці. Наприклад: Швабська' });
+    }
+
+    await telegram.sendMessage({ chat_id: '391326164', text: 'hello buddy' });
 
     return res.end();
   } catch (e) {
