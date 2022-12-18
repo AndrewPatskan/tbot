@@ -10,6 +10,8 @@ router.post('/message', async (req, res, next) => {
 
     const { message } = body;
 
+    console.log(message)
+
     if (message?.text.includes('start')) {
       return res.json({ text: 'Введіть назву вулиці. Наприклад: Швабська' });
     }
