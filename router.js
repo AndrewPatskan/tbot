@@ -4,7 +4,7 @@ const router = express.Router();
 
 const { telegram } = require('./adapters/telegram');
 
-router.get('/message', async (req, res, next) => {
+router.post('/message', async (req, res, next) => {
   try {
     const { body } = req;
 
