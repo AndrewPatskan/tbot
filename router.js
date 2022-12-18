@@ -11,7 +11,7 @@ router.post('/message', async (req, res, next) => {
     const { message } = body;
 
     if (message?.text.includes('start')) {
-      await telegram.sendMessage({ chat_id: message.chat_id, text: 'Введіть назву вулиці. Наприклад: Швабська' });
+      await telegram.sendMessage({ chat_id: message.chat.id, text: 'Введіть назву вулиці. Наприклад: Швабська' });
 
       return res.end();
     }
