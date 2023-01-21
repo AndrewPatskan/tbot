@@ -10,13 +10,13 @@ router.get('/message', async (req, res, next) => {
 
     console.log(body)
 
-    if (message?.text.includes('start')) {
+    if (body.message?.text.includes('start')) {
       await userService.initBot(body);
 
       return res.end();
     }
 
-    if (message?.text.includes('stop')) {
+    if (body.message?.text.includes('stop')) {
       await userService.stopBot(body);
 
       return res.end();
