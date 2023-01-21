@@ -38,7 +38,7 @@ class Service {
 
     const [data, user] = await Promise.all([
       Service.findQueue(street),
-      db.getUser(chatId),
+      // db.getUser(chatId),
     ]);
 
     if (!data) {
@@ -48,17 +48,17 @@ class Service {
       });
     }
 
-    if (!user) {
-      await db.saveUser({
-        chatId,
-        first_name,
-        last_name,
-        username,
-        street,
-      });
-    } else {
-      await db.updateUser(chatId, street);
-    }
+    // if (!user) {
+    //   await db.saveUser({
+    //     chatId,
+    //     first_name,
+    //     last_name,
+    //     username,
+    //     street,
+    //   });
+    // } else {
+    //   await db.updateUser(chatId, street);
+    // }
 
     await telegram.sendMessage({
       chat_id: chatId,
@@ -74,7 +74,7 @@ class Service {
   async stopBot(body) {
     const chatId = body?.message?.chat.id || body?.my_chat_member?.chat.id
 
-    await db.deleteUser(chatId);
+    // await db.deleteUser(chatId);
 
     return telegram.sendMessage({
       chat_id: chatId,
