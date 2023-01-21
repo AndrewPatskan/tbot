@@ -125,7 +125,7 @@ class Service {
 
     return {
       queue: 1,
-      imageUrl: `${config.ZAKOE_URL}/upload/current-timetable/ff8/jhkx87wd33cjf915cw790ywh2a6ayqik/gr_210123.PNG`,
+      imageUrl: `${config.ZAKOE_URL}/${config.SHEDULE_IMAGE_NAME}`,
     }
   }
 }
