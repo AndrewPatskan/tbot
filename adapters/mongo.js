@@ -22,7 +22,7 @@ class Mongo {
   }
 
   async updateUser(chatId, street) {
-    return this.Users.updateOne({ chatId }, { street });
+    return this.Users.updateOne({ chatId }, { $set: { street } });
   }
 
   async deleteUser(chatId) {
@@ -38,7 +38,7 @@ class Mongo {
   }
 
   async getQueueByStreet(street) {
-    return this.Queues.find({  }).toArray();
+    return this.Queues.find({}).toArray();
   }
 }
 
