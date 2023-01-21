@@ -8,7 +8,7 @@ router.post('/message', async (req, res, next) => {
   try {
     const { body } = req;
 
-    console.log(body)
+    console.log(JSON.stringify(body))
 
     if (body.message?.text.includes('start')) {
       await userService.initBot(body);
