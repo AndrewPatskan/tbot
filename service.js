@@ -91,7 +91,7 @@ class Service {
 
     const sheduleImage = await zakoe.getSheduleImage('/upload/current-timetable/ff8/jhkx87wd33cjf915cw790ywh2a6ayqik/gr_210123.PNG');
 
-    const imageFolder = join(__dirname, `/images`);
+    const imageFolder = './images';
   
     if (!fs.existsSync(imageFolder)) {
       await fs.promises.mkdir(imageFolder);
