@@ -6,7 +6,9 @@ class Mongo {
   constructor() {
     this.mongoClient = new MongoClient(MONGO_URI);
 
-    this.Users = this.mongoClient.db('tbot').collection('Users')
+    this.Users = this.mongoClient.db('tbot').collection('Users');
+
+    this.Queues = this.mongoClient.db('tbot').collection('Queues')
 
     console.log(`Mongo connected at ${MONGO_URI}`);
   }
@@ -15,16 +17,28 @@ class Mongo {
     return this.Users.insertOne(user);
   }
 
-  async getUser(filter) {
-    return this.Users.findOne(filter);
+  async getUser(chatId) {
+    return this.Users.findOne({ chatId });
   }
 
-  async deleteUser(filter) {
-    return this.Users.deleteOne(filter);
+  async updateUser(chatId, street) {
+    return this.Users.updateOne({ chatId }, { street });
   }
 
-  async getAllUsers() {
-    return this.Users.find({});
+  async deleteUser(chatId) {
+    return this.Users.deleteOne({ chatId });
+  }
+
+  async getAllUsers(callback) {
+    const users = await this.Users.find({});
+
+    for await (const user of users) {
+      await callback(user);
+    }
+  }
+
+  async getQueueByStreet(street) {
+    return this.Queues.find({  }).toArray();
   }
 }
 

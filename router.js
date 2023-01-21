@@ -2,29 +2,35 @@ const express = require('express');
 
 const router = express.Router();
 
-const { userService } = require('./services/user.service');
+const { service } = require('./service');
 
 router.post('/message', async (req, res, next) => {
   try {
     const { body } = req;
 
-    console.log(JSON.stringify(body))
-
     if (body.message?.text.includes('start')) {
-      await userService.initBot(body);
+      await service.initBot(body);
 
       return res.end();
     }
 
-    if (body.message?.text.includes('stop')) {
-      await userService.stopBot(body);
+    if (!body.message?.text || body.message.text.includes('stop')) {
+      await service.stopBot(body);
 
       return res.end();
     }
 
-    await userService.startBot(body);
+    await service.startBot(body);
 
     return res.end();
+  } catch (e) {
+    return next(e);
+  }
+});
+
+router.get('/update-shedule-nqCeEWdsds6*&dshjsd', async (req, res, next) => {
+  try {
+    await service.updateScheduleCJ();
   } catch (e) {
     return next(e);
   }

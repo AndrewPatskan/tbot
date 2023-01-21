@@ -16,6 +16,16 @@ class Telegram {
 
     return response?.body?.json();
   }
+
+  async sendPhoto(query) {
+    const response = await this.telegramClient.request({
+      method: 'GET',
+      path: `/bot${TELEGRAM_TOKEN}/sendPhoto`,
+      query,
+    });
+
+    return response?.body?.json();
+  }
 }
 
 module.exports = { telegram: new Telegram() };

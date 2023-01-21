@@ -4,19 +4,27 @@ const {
   config: { ZAKOE_URL },
 } = require('../config');
 
-class Telegram {
+class ZakOE {
   constructor() {
     this.zakoeClient = new Client(ZAKOE_URL);
   }
 
-  async getMainPage(query) {
+  async getMainPage() {
     const response = await this.zakoeClient.request({
       method: 'GET',
       path: '/customers/break-in-electricity-supply/schedule/',
-      query,
     });
 
-    return response?.body?.json();
+    return response?.body?.text();
+  }
+
+  async getSheduleImage(path) {
+    const response = await this.zakoeClient.request({
+      method: 'GET',
+      path,
+    });
+
+    return response?.body;
   }
 
   async getCPDF(cNumber) {
@@ -30,4 +38,4 @@ class Telegram {
   }
 }
 
-module.exports = { telegram: new Telegram() };
+module.exports = { zakoe: new ZakOE() };
