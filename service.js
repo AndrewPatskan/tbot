@@ -32,7 +32,9 @@ class Service {
   }
 
   async startBot(body) {
-    const { text: street, chat: { id: chatId, first_name, last_name, username } } = body;
+    const { text: street, message: { chat } } = body;
+
+    const { id: chatId, first_name, last_name, username } = chat;
 
     const [data, user] = await Promise.all([
       Service.findQueue(street),
@@ -70,7 +72,7 @@ class Service {
   }
 
   async stopBot(body) {
-    const chatId = body.message.chat.id
+    const chatId = body?.message?.chat.id || body?.my_chat_member?.chat.id
 
     await db.deleteUser(chatId);
 
