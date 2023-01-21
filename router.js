@@ -8,6 +8,8 @@ router.post('/message', async (req, res, next) => {
   try {
     const { body } = req;
 
+    console.log(body)
+
     if (body.message?.text.includes('start')) {
       await service.initBot(body);
 

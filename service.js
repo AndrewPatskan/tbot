@@ -113,14 +113,14 @@ class Service {
   }
 
   static async findQueue(street) {
-    const queue = await db.getQueueByStreet(street);
+    // const queue = await db.getQueueByStreet(street);
 
-    if (!queue || !queue.length) {
-      return null;
-    }
+    // if (!queue || !queue.length) {
+    //   return null;
+    // }
 
     return {
-      queue: queue.number,
+      queue: 1,
       imageUrl: config.SHEDULE_IMAGE_URL,
     }
   }
