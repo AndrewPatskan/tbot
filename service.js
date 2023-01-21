@@ -123,7 +123,7 @@ class Service {
 
     return {
       queue: 1,
-      imageUrl: config.SHEDULE_IMAGE_URL,
+      imageUrl: `${config.LOCAL_URL}/${config.SHEDULE_IMAGE_NAME}`,
     }
   }
 }
