@@ -2,21 +2,27 @@ const express = require('express');
 
 const router = express.Router();
 
-const { telegram } = require('./adapters/telegram');
+const { userService } = require('./services/user.service');
 
-router.post('/message', async (req, res, next) => {
+router.get('/message', async (req, res, next) => {
   try {
     const { body } = req;
 
-    const { message } = body;
+    console.log(body)
 
     if (message?.text.includes('start')) {
-      await telegram.sendMessage({ chat_id: message.chat.id, text: 'Введіть назву вулиці. Наприклад: Швабська' });
+      await userService.initBot(body);
 
       return res.end();
     }
 
-    await telegram.sendMessage({ chat_id: '391326164', text: 'hello buddy' });
+    if (message?.text.includes('stop')) {
+      await userService.stopBot(body);
+
+      return res.end();
+    }
+
+    await userService.startBot(body);
 
     return res.end();
   } catch (e) {

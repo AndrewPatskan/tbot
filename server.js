@@ -2,10 +2,12 @@ const { config: { HOST, PORT } } = require('./config');
 
 const app = require('./app');
 
-(async () => {
-  const server = await app();
+app.listen(PORT, HOST, (e) => {
+  if (e) {
+    console.log(e);
 
-  server.listen(PORT, HOST, () => {
-    console.log(`Server running at ${HOST}:${PORT}`);
-  });
-})();
+    process.exit(1);
+  }
+
+  console.log(`Server running at ${HOST}:${PORT}`);
+});

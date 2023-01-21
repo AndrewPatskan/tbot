@@ -14,13 +14,7 @@ class Telegram {
       query,
     });
 
-    const data = await response.body.json();
-
-    return {
-      data,
-      status: response.statusCode,
-      message: response.message || '',
-    };
+    return response?.body?.json();
   }
 }
 

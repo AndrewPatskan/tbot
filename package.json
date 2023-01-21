@@ -6,9 +6,6 @@
   "engines": {
     "node": ">=16.0.0"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Andrew Patskan",
   "license": "ISC",
   "dependencies": {
@@ -18,6 +15,6 @@
     "helmet": "6.0.1",
     "mongodb": "4.12.1",
     "pm2": "5.2.2",
-    "undici": "^5.14.0"
+    "undici": "5.14.0"
   }
 }
