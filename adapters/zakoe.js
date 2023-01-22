@@ -13,6 +13,9 @@ class ZakOE {
     const response = await this.zakoeClient.request({
       method: 'GET',
       path: '/customers/break-in-electricity-supply/schedule/',
+      headers: {
+        "user-agent": 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
+      },
     });
 
     return response?.body?.text();
@@ -22,6 +25,9 @@ class ZakOE {
     const response = await this.zakoeClient.request({
       method: 'GET',
       path,
+      headers: {
+        "user-agent": 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
+      },
     });
 
     return response?.body;
