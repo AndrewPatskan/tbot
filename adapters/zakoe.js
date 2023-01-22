@@ -18,23 +18,13 @@ class ZakOE {
     return response?.body?.text();
   }
 
-  async getSheduleImage(path) {
+  async getScheduleImage(path) {
     const response = await this.zakoeClient.request({
       method: 'GET',
       path,
     });
 
     return response?.body;
-  }
-
-  async getCPDF(cNumber) {
-    const response = await this.zakoeClient.request({
-      method: 'GET',
-      path: `/customers/break-in-electricity-supply/schedule/cherga${cNumber}.pdf`,
-      query,
-    });
-
-    return response?.body?.json();
   }
 }
 

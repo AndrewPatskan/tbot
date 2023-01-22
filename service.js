@@ -1,16 +1,20 @@
-const fs = require('fs');
-const { join } = require('path');
-const { parse: htmlParse }  = require('node-html-parser');
+const fs = require("fs");
+const { parse: htmlParse } = require("node-html-parser");
+const pdf = require("pdf-parse");
+const { resolve } = require("path");
 
-const { telegram } = require('./adapters/telegram');
+const { telegram } = require("./adapters/telegram");
 
-const { db } = require('./adapters/mongo');
+const { db } = require("./adapters/mongo");
 
-const { zakoe } = require('./adapters/zakoe');
+const { zakoe } = require("./adapters/zakoe");
 
-const { TEXTS } = require('./constants/texts.ua');
+const { TEXTS } = require("./constants/texts.ua");
 
-const { config } = require('./config');
+const { config } = require("./config");
+
+const wait = (waitTime) =>
+  new Promise((resolve) => setTimeout(resolve, waitTime));
 
 class Service {
   async initBot(body) {
@@ -32,7 +36,9 @@ class Service {
   }
 
   async startBot(body) {
-    const { text: street, message: { chat } } = body;
+    const {
+      message: { chat, text: street },
+    } = body;
 
     const { id: chatId, first_name, last_name, username } = chat;
 
@@ -60,7 +66,7 @@ class Service {
       await db.updateUser(chatId, street);
     }
 
-    console.log(data.imageUrl)
+    console.log(data.imageUrl);
 
     await telegram.sendMessage({
       chat_id: chatId,
@@ -74,7 +80,7 @@ class Service {
   }
 
   async stopBot(body) {
-    const chatId = body?.message?.chat.id || body?.my_chat_member?.chat.id
+    const chatId = body?.message?.chat.id || body?.my_chat_member?.chat.id;
 
     await db.deleteUser(chatId);
 
@@ -85,19 +91,61 @@ class Service {
   }
 
   async updateScheduleCJ() {
-    // const page = await zakoe.getMainPage();
+    // parse page
+    const page = await zakoe.getMainPage();
 
-    // const parsedPage = htmlParse(page);
+    const parsedPage = htmlParse(page);
 
-    const sheduleImage = await zakoe.getSheduleImage('/upload/current-timetable/ff8/jhkx87wd33cjf915cw790ywh2a6ayqik/gr_210123.PNG');
+    const pdfElems = parsedPage
+      .getElementsByTagName("a")
+      .filter(
+        (elem) =>
+          elem
+            .getAttribute("href")
+            .includes("customers/break-in-electricity-supply/schedule") &&
+          elem.getAttribute("class") === "title"
+      );
 
-    const imageFolder = './images';
-  
+    const scheduleImageUrl = parsedPage
+      .getElementsByTagName("img")
+      .find((elem) => elem.getAttribute("src").includes("upload"))
+      .getAttribute("src");
+
+    // download image and pdfs
+    const imageFolder = "./images";
+
     if (!fs.existsSync(imageFolder)) {
       await fs.promises.mkdir(imageFolder);
     }
 
-    sheduleImage.pipe(fs.createWriteStream(`${imageFolder}/${config.SHEDULE_IMAGE_NAME}`));
+    const scheduleImageStream = await zakoe.getScheduleImage(scheduleImageUrl);
+
+    await Service.writeStream(
+      scheduleImageStream,
+      `${imageFolder}/${config.SCHEDULE_IMAGE_NAME}`
+    );
+
+    let queue = 1;
+
+    for (const pdfElem of pdfElems) {
+      const pdfStream = await zakoe.getScheduleImage(
+        pdfElem.getAttribute("href")
+      );
+
+      await Service.writeStream(pdfStream, `${imageFolder}/${queue}.pdf`);
+
+      await wait(2000);
+
+      const file = await fs.promises.readFile(
+        resolve(__dirname, `./images/${queue}.pdf`)
+      );
+
+      const pdfObj = await pdf(file);
+
+      await db.saveQueue({ queue }, { queue, streets: pdfObj.text });
+
+      queue += 1;
+    }
   }
 
   async sendNewScheduleCJ() {
@@ -108,7 +156,7 @@ class Service {
         chat_id: chatId,
         text: data.queue,
       });
-  
+
       await telegram.sendPhoto({
         chat_id: chatId,
         photo: data.imageUrl,
@@ -117,16 +165,28 @@ class Service {
   }
 
   static async findQueue(street) {
-    // const queue = await db.getQueueByStreet(street);
+    const docs = await db.getQueueByStreet(street);
 
-    // if (!queue || !queue.length) {
-    //   return null;
-    // }
+    if (!docs || !docs.length) {
+      return null;
+    }
 
     return {
-      queue: 1,
-      imageUrl: `${config.ZAKOE_URL}/${config.SHEDULE_IMAGE_NAME}`,
-    }
+      queue: `Черги: ${docs.map((el) => el.queue).join(', ')}`,
+      imageUrl: `${config.ZAKOE_URL}/${config.SCHEDULE_IMAGE_NAME}`,
+    };
+  }
+
+  static async writeStream(stream, path) {
+    const writeStrm = stream.pipe(fs.createWriteStream(path));
+
+    return new Promise((resolve, reject) => {
+      writeStrm.on("finish", () => {
+        resolve("complete");
+      });
+
+      writeStrm.on("error", reject);
+    });
   }
 }
 

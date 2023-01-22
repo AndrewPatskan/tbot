@@ -38,7 +38,11 @@ class Mongo {
   }
 
   async getQueueByStreet(street) {
-    return this.Queues.find({}).toArray();
+    return this.Queues.find({ streets: { $regex: new RegExp(street, 'i') } }).toArray();
+  }
+
+  async saveQueue(match, data) {
+    return this.Queues.updateOne(match, { $set: data }, { upsert: true })
   }
 }
 
