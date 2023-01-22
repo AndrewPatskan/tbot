@@ -96,6 +96,9 @@ class Service {
 
     const parsedPage = htmlParse(page);
 
+    console.log(page)
+    console.log(parsedPage)
+
     const pdfElems = parsedPage
       .getElementsByTagName("a")
       .filter(
