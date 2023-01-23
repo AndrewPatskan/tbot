@@ -115,7 +115,7 @@ class Service {
       .getAttribute("src");
 
     // download image and pdfs
-    const imageFolder = "./images";
+    const imageFolder = "./public";
 
     if (!fs.existsSync(imageFolder)) {
       await fs.promises.mkdir(imageFolder);
@@ -140,7 +140,7 @@ class Service {
       await wait(2000);
 
       const file = await fs.promises.readFile(
-        resolve(__dirname, `./images/${queue}.pdf`)
+        resolve(__dirname, `./public/${queue}.pdf`)
       );
 
       const pdfObj = await pdf(file);
@@ -176,7 +176,7 @@ class Service {
 
     return {
       queue: `Черги: ${docs.map((el) => el.queue).join(', ')}`,
-      imageUrl: `${config.ZAKOE_URL}/${config.SCHEDULE_IMAGE_NAME}`,
+      imageUrl: `${config.LOCAL_URL}/${config.SCHEDULE_IMAGE_NAME}`,
     };
   }
 

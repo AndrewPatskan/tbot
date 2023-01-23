@@ -33,6 +33,8 @@ router.post('/message', async (req, res, next) => {
 router.get('/update-shedule-nqCeEWdsds6*&dshjsd', async (req, res, next) => {
   try {
     await service.updateScheduleCJ();
+
+    return res.end();
   } catch (e) {
     return next(e);
   }
