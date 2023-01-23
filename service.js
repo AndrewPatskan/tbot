@@ -2,6 +2,7 @@ const fs = require("fs");
 const { parse: htmlParse } = require("node-html-parser");
 const pdf = require("pdf-parse");
 const { resolve } = require("path");
+const sharp = require("sharp");
 
 const { telegram } = require("./adapters/telegram");
 
@@ -96,8 +97,8 @@ class Service {
 
     const parsedPage = htmlParse(page);
 
-    console.log(page)
-    console.log(parsedPage)
+    console.log(page);
+    console.log(parsedPage);
 
     const pdfElems = parsedPage
       .getElementsByTagName("a")
@@ -123,10 +124,18 @@ class Service {
 
     const scheduleImageStream = await zakoe.getScheduleImage(scheduleImageUrl);
 
-    await Service.writeStream(
-      scheduleImageStream,
-      `${imageFolder}/${config.SCHEDULE_IMAGE_NAME}`
-    );
+    const tempPath = `${imageFolder}/rt${config.SCHEDULE_IMAGE_NAME}`;
+
+    await Service.writeStream(scheduleImageStream, tempPath);
+
+    await sharp(tempPath)
+      .resize(1260, 280, {
+        kernel: sharp.kernel.nearest,
+        fit: "cover",
+      })
+      .toFile(`${imageFolder}/${config.SCHEDULE_IMAGE_NAME}`);
+
+    await fs.promises.unlink(tempPath);
 
     let queue = 1;
 
