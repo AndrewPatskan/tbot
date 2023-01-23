@@ -97,9 +97,6 @@ class Service {
 
     const parsedPage = htmlParse(page);
 
-    console.log(page);
-    console.log(parsedPage);
-
     const pdfElems = parsedPage
       .getElementsByTagName("a")
       .filter(
@@ -124,7 +121,7 @@ class Service {
 
     const scheduleImageStream = await zakoe.getScheduleImage(scheduleImageUrl);
 
-    const tempPath = `${imageFolder}/rt${config.SCHEDULE_IMAGE_NAME}`;
+    const tempPath = `${imageFolder}/temp.png`;
 
     await Service.writeStream(scheduleImageStream, tempPath);
 
@@ -133,6 +130,7 @@ class Service {
         kernel: sharp.kernel.nearest,
         fit: "cover",
       })
+      .jpeg({ mozjpeg: true })
       .toFile(`${imageFolder}/${config.SCHEDULE_IMAGE_NAME}`);
 
     await fs.promises.unlink(tempPath);
