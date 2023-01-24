@@ -17,6 +17,7 @@
     "node-html-parser": "6.1.4",
     "pdf-parse": "1.1.1",
     "pm2": "5.2.2",
+    "puppeteer": "19.6.0",
     "sharp": "0.31.3",
     "undici": "5.14.0"
   }
