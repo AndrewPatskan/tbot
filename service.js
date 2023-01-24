@@ -94,6 +94,8 @@ class Service {
 
   async updateScheduleCJ() {
     const page = await zakarpatEnergyAdapter.fetchSchedulePageEntities();
+
+    console.log(page)
     // parse page
     // const page = await zakoe.getMainPage();
 
