@@ -199,7 +199,7 @@ class ZakarpatEnergySchedule {
       this.#extractActionLogEntries($pageContent),
     ]);
 
-    if (await this.#browserInstance.destroy())
+    if (this.#browserInstance && (await this.#browserInstance.destroy()))
       console.log("Browser instance was destroyed.");
 
     return {
