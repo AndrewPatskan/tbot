@@ -1,5 +1,4 @@
 const fs = require("fs");
-// const { parse: htmlParse } = require("node-html-parser");
 const pdf = require("pdf-parse");
 const { resolve } = require("path");
 const sharp = require("sharp");
@@ -176,15 +175,15 @@ class Service {
   }
 
   static async findQueue(street) {
-    const docs = await db.getQueueByStreet(street);
+    // const docs = await db.getQueueByStreet(street);
 
-    if (!docs || !docs.length) {
-      return null;
-    }
+    // if (!docs || !docs.length) {
+    //   return null;
+    // }
 
     return {
-      queue: `Черги: ${docs.map((el) => el.queue).join(', ')}`,
-      // queue: 4,
+      // queue: `Черги: ${docs.map((el) => el.queue).join(', ')}`,
+      queue: 'none',
       imageUrl: `${config.LOCAL_URL}/${config.SCHEDULE_IMAGE_NAME}`,
     };
   }
