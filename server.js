@@ -17,5 +17,5 @@ app.listen(PORT, HOST, (e) => {
 
   cronJobs();
 
-  // service.updateScheduleCJ();
+  service.updateScheduleCJ();
 });

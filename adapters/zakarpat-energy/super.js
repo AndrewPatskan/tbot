@@ -121,7 +121,7 @@ class ZakarpatEnergySchedule {
       .querySelectorAll(
         'a[href^="/customers/break-in-electricity-supply/schedule"].title'
       )
-      ?.map((node) => `${ZAKOE_URL}${node.getAttribute("href")}`);
+      ?.map((node) => `${node.getAttribute("href")}`);
 
     return {
       content,
