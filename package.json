@@ -6,6 +6,9 @@
   "engines": {
     "node": ">=16.0.0"
   },
+  "scripts": {
+    "start": "node index.js --production"
+  },
   "author": "Andrew Patskan",
   "license": "ISC",
   "dependencies": {

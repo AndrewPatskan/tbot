@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
     name: 'server',
-    script: './server.js',
+    script: './index.js',
     instances: 1,
     out_file: './logs/out',
     error_file: './logs/error',
