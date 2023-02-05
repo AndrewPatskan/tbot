@@ -1,16 +1,16 @@
 const { MongoClient } = require('mongodb');
 
-const { config: { MONGO_URI } } = require('../config');
+const { config } = require('../config');
 
 class Mongo {
   constructor() {
-    this.mongoClient = new MongoClient(MONGO_URI);
+    this.mongoClient = new MongoClient(config.MONGO_URI);
 
     this.Users = this.mongoClient.db('tbot').collection('Users');
 
     this.Queues = this.mongoClient.db('tbot').collection('Queues')
 
-    console.log(`Mongo connected at ${MONGO_URI}`);
+    console.log(`Mongo connected at ${config.MONGO_URI}`);
   }
 
   async saveUser(user) {
@@ -39,6 +39,10 @@ class Mongo {
 
   async getQueueByStreet(street) {
     return this.Queues.find({ streets: { $regex: new RegExp(street, 'i') } }).toArray();
+  }
+
+  async getImageName() {
+    return this.Queues.findOne({ idName: config.SCHEDULE_IMAGE_NAME });
   }
 
   async saveQueue(match, data) {

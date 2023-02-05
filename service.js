@@ -68,8 +68,6 @@ class Service {
       await db.updateUser(chatId, street);
     }
 
-    console.log(data.imageUrl);
-
     await telegram.sendMessage({
       chat_id: chatId,
       text: data.queue,
@@ -127,6 +125,10 @@ class Service {
 
     const tempPath = `${imageFolder}/temp.png`;
 
+    const imageName = `${new Date().getTime()}-${config.SCHEDULE_IMAGE_NAME}`;
+
+    await db.saveQueue({ idName: config.SCHEDULE_IMAGE_NAME }, { idName: config.SCHEDULE_IMAGE_NAME, name: imageName });
+
     await Service.writeStream(scheduleImageStream, tempPath);
 
     await sharp(tempPath)
@@ -135,7 +137,7 @@ class Service {
         fit: "cover",
       })
       .jpeg({ mozjpeg: true })
-      .toFile(`${imageFolder}/${config.SCHEDULE_IMAGE_NAME}`);
+      .toFile(`${imageFolder}/${imageName}`);
 
     await fs.promises.unlink(tempPath);
 
@@ -177,16 +179,18 @@ class Service {
   }
 
   static async findQueue(street) {
-    // const docs = await db.getQueueByStreet(street);
+    const [docs, image] = await Promise.all([
+      db.getQueueByStreet(street),
+      db.getImageName(),
+    ]);
 
-    // if (!docs || !docs.length) {
-    //   return null;
-    // }
+    if (!docs || !docs.length) {
+      return null;
+    }
 
     return {
-      // queue: `Черги: ${docs.map((el) => el.queue).join(', ')}`,
-      queue: 'none',
-      imageUrl: `${config.LOCAL_URL}/${config.SCHEDULE_IMAGE_NAME}`,
+      queue: `Черги: ${docs.map((el) => el.queue).join(', ')}`,
+      imageUrl: image.name,
     };
   }
 
