@@ -193,6 +193,8 @@ class ZakarpatEnergySchedule {
       "/customers/break-in-electricity-supply/schedule/"
     );
 
+    console.log($pageContent)
+
     const [pdfLinks, scheduleImage, actionLogEntries] = await Promise.all([
       this.#extractPDFLinks($pageContent),
       this.#extractScheduleImageLink($pageContent),
